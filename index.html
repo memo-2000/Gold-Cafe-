@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>جولد كافيه</title>
+<meta name="theme-color" content="#1a0f08">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gold Cafe">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#1a0f08;--card:#2a1810;--gold:#e8b84a;--gold2:#b8862b;--text:#f6ead2;--mut:#c9b28a;--line:#5a3d22;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:radial-gradient(circle at 50% 0,#3b2314,var(--bg) 60%) fixed;color:var(--text);font-family:Tahoma,"Segoe UI",Arial,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(76px + env(safe-area-inset-bottom,0px));min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding:14px 16px}
+header{text-align:center;padding:8px 0}
+header .logo{font-size:40px}
+h1{margin:0;color:var(--gold);font-size:28px}
+.en{color:var(--gold2);font-weight:bold;letter-spacing:3px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-top:14px}
+h2{margin:0 0 10px;color:var(--gold);font-size:19px}
+label{display:block;margin:12px 0 6px;color:var(--mut);font-size:14px}
+input[type=text],input[type=tel],input[type=search],input[type=number],select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#1a0f08;color:var(--text);font-size:16px;font-family:inherit}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opts label{margin:0;flex:1;min-width:30%}
+.opts input{display:none}
+.opts span{display:block;text-align:center;padding:11px 6px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#1a0f08;font-size:14px}
+.opts input:checked+span{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#2a1810;font-weight:bold;border-color:var(--gold)}
+button{font-family:inherit;cursor:pointer;border:0;border-radius:12px;padding:13px;font-size:16px;font-weight:bold}
+.main{width:100%;margin-top:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#2a1810}
+.sec{background:#1a0f08;color:var(--gold);border:1px solid var(--gold2);padding:9px 12px;font-size:14px}
+.err{color:#ff9d8a;font-size:14px;min-height:18px;margin-top:8px}
+.total{margin-top:14px;padding:12px;border:1px dashed var(--gold2);border-radius:12px;text-align:center;color:var(--gold);font-size:18px;font-weight:bold}
+.hide{display:none!important}
+.ord{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;font-size:15px;line-height:1.8;white-space:pre-line}
+.row{display:flex;gap:8px;margin-top:8px}
+.steps{display:flex;justify-content:space-between;margin-top:10px;position:relative}
+.steps:before{content:"";position:absolute;top:11px;right:12%;left:12%;height:3px;background:var(--line)}
+.step{flex:1;text-align:center;font-size:11px;color:var(--mut);position:relative}
+.step i{display:block;width:24px;height:24px;border-radius:50%;background:var(--line);margin:0 auto 4px;position:relative}
+.step.on{color:var(--gold)}
+.step.on i{background:var(--gold);box-shadow:0 0 8px var(--gold2)}
+nav{position:fixed;bottom:0;right:0;left:0;display:flex;background:#120a05;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:20}
+nav button{flex:1;background:none;color:var(--mut);border-radius:0;padding:10px 4px 8px;font-size:12px;position:relative}
+nav button b{display:block;font-size:22px}
+nav button.on{color:var(--gold)}
+.badge{position:absolute;top:4px;left:50%;margin-left:8px;background:#d33;color:#fff;border-radius:10px;font-size:11px;min-width:18px;padding:1px 5px}
+#inst{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#2a1810;padding:10px 14px;display:flex;gap:10px;align-items:center;font-size:14px;font-weight:bold}
+#inst button{background:#2a1810;color:var(--gold);padding:8px 12px;font-size:13px}
+#inst .x{background:none;color:#2a1810;font-size:20px;padding:0 6px}
+#toast{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-150%);background:var(--card);border:1px solid var(--gold);color:var(--gold);padding:12px 18px;border-radius:12px;z-index:50;transition:transform .3s;max-width:90%;text-align:center}
+#toast.show{transform:translate(-50%,0)}
+.prices{display:grid;grid-template-columns:1fr 100px;gap:6px;align-items:center}
+#print{display:none}
+@media print{body>*:not(#print){display:none!important}#print{display:block!important;color:#000;background:#fff;padding:24px;direction:rtl;font-family:Tahoma,Arial,sans-serif}#print h1{color:#000;border-bottom:2px solid #b8862b}#print td{padding:8px;border-bottom:1px solid #ccc;font-size:16px}#print td:first-child{font-weight:bold;width:35%}}
+</style>
+</head>
+<body>
+<div id="inst" class="hide"><span id="instTxt">📲 ثبّت تطبيق جولد كافيه على هاتفك</span><button id="instBtn">تثبيت</button><button class="x" id="instX">×</button></div>
+<div id="toast"></div>
+
+<div class="wrap">
+<header><div class="logo">☕</div><h1>جولد كافيه</h1><div class="en">GOLD CAFE</div></header>
+
+<section id="vOrder">
+<div class="card">
+ <h2>طلب جديد</h2>
+ <label for="name">الاسم</label><input type="text" id="name" autocomplete="name">
+ <label for="phone">رقم التواصل</label><input type="tel" id="phone" autocomplete="tel" inputmode="tel" dir="ltr" style="text-align:right">
+ <label for="bean">نوع البن</label><select id="bean"></select>
+ <label>درجة التحميص</label>
+ <div class="opts"><label><input type="radio" name="roast" value="فاتح"><span>فاتح</span></label><label><input type="radio" name="roast" value="وسط"><span>وسط</span></label><label><input type="radio" name="roast" value="غامق"><span>غامق</span></label></div>
+ <label>التحضير</label>
+ <div class="opts"><label><input type="radio" name="prep" value="سادة"><span>سادة</span></label><label><input type="radio" name="prep" value="محوج"><span>محوج</span></label></div>
+ <label for="qty">الكمية</label><select id="qty"></select>
+ <label>طريقة الاستلام</label>
+ <div class="opts"><label><input type="radio" name="mode" value="استلام من الفرع"><span>استلام من الفرع</span></label><label><input type="radio" name="mode" value="توصيل"><span>توصيل</span></label></div>
+ <div id="addrBox" class="hide"><label for="addr">عنوان التوصيل</label><textarea id="addr" rows="2"></textarea></div>
+ <label>طريقة الدفع</label>
+ <div class="opts"><label><input type="radio" name="pay" value="كاش عند الاستلام"><span>كاش</span></label><label><input type="radio" name="pay" value="فودافون كاش"><span>فودافون كاش</span></label><label><input type="radio" name="pay" value="إنستاباي"><span>إنستاباي</span></label><label><input type="radio" name="pay" value="كارت عند الاستلام"><span>كارت</span></label></div>
+ <div class="total" id="total">الإجمالي التقديري: ٠ جنيه</div>
+ <div class="err" id="err"></div>
+ <button class="main" id="send">إرسال الطلب عبر واتساب</button>
+</div>
+</section>
+
+<section id="vTrack" class="hide"><div class="card"><h2>تتبع طلباتي</h2><div id="mine"></div></div></section>
+
+<section id="vAdmin" class="hide">
+ <div class="card">
+  <h2>لوحة الإدارة</h2>
+  <input type="search" id="q" placeholder="بحث برقم الطلب أو الهاتف">
+  <select id="flt" style="margin-top:8px"><option value="all">كل الطلبات</option><option value="new">جديد</option><option value="prep">قيد التحضير</option><option value="ready">جاهز / جاري التوصيل</option><option value="done">تم التسليم</option></select>
+  <div class="row"><button class="sec" id="csv" style="flex:1">تصدير كشف اليوم (CSV)</button><button class="sec" id="lock">قفل</button></div>
+  <div id="list"></div>
+ </div>
+ <div class="card"><h2>الأسعار (جنيه / كيلو)</h2><div class="prices" id="prices"></div></div>
+</section>
+</div>
+
+<nav>
+ <button id="nOrder" class="on"><b>☕</b>طلب جديد</button>
+ <button id="nTrack"><b>📦</b>تتبع طلباتي<span class="badge hide" id="badge">0</span></button>
+ <button id="nAdmin"><b>🔐</b>الإدارة</button>
+</nav>
+<div id="print"></div>
+
+<script>
+(function(){
+"use strict";
+var PASS="gold2026",WA="201098002701";
+var DEF={"برازيلي":600,"تركي":450,"أبو عوف":550,"المشتهي":500,"المتوكل":520};
+var QTY={"ربع كيلو":.25,"نصف كيلو":.5,"١ كيلو":1,"٢ كيلو":2};
+var ST=["new","prep","ready","done"];
+var $=function(i){return document.getElementById(i)};
+function ld(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var prices=ld("gc_prices",DEF),orders=ld("gc_orders",[]),authed=false,seen=ld("gc_seen",{});
+function stL(k,m){return{new:"تم الاستلام",prep:"قيد التحضير",ready:m==="توصيل"?"جاري التوصيل":"جاهز للاستلام",done:"تم التسليم"}[k||"new"]}
+function pick(n){var e=document.querySelector('input[name="'+n+'"]:checked');return e?e.value:""}
+function fmt(t){try{return new Date(t).toLocaleString("ar-EG")}catch(e){return""}}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function toast(m){var t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},3200);
+ try{var a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;g.gain.value=.08;o.start();o.stop(a.currentTime+.15)}catch(e){}
+ if(navigator.vibrate)navigator.vibrate(60)}
+function save(){sv("gc_orders",orders);sv("gc_prices",prices)}
+
+/* selects */
+function fillSel(){var b=$("bean");b.textContent="";var o=el("option","","اختر نوع البن");o.value="";b.appendChild(o);
+ Object.keys(prices).forEach(function(k){var p=el("option","",k+" — "+prices[k]+" ج/كجم");p.value=k;b.appendChild(p)});}
+Object.keys(QTY).forEach(function(k){var o=el("option","",k);o.value=k;$("qty").appendChild(o)});
+function total(){var p=prices[$("bean").value]||0,q=QTY[$("qty").value]||0;return Math.round(p*q)}
+function upTotal(){$("total").textContent="الإجمالي التقديري: "+total().toLocaleString("ar-EG")+" جنيه"}
+$("bean").onchange=$("qty").onchange=upTotal;
+document.querySelectorAll('input[name="mode"]').forEach(function(r){r.onchange=function(){$("addrBox").classList.toggle("hide",r.value!=="توصيل")}});
+(function(){var c=ld("gc_cust",{});$("name").value=c.name||"";$("phone").value=c.phone||"";$("addr").value=c.addr||""})();
+
+/* nav */
+function show(v){["Order","Track","Admin"].forEach(function(n){$("v"+n).classList.toggle("hide",n!==v);$("n"+n).classList.toggle("on",n===v)});window.scrollTo(0,0)}
+$("nOrder").onclick=function(){show("Order")};
+$("nTrack").onclick=function(){show("Track");renderMine()};
+$("nAdmin").onclick=function(){if(!authed){var p=prompt("كلمة سر الإدارة");if(p!==PASS)return;authed=true}show("Admin");renderAdmin()};
+$("lock").onclick=function(){authed=false;show("Order")};
+
+/* order */
+function waText(o){return "طلب جديد من جولد كافيه #"+o.code+"\nالاسم: "+o.name+"\nالهاتف: "+o.phone+"\nنوع البن: "+o.bean+"\nالتحميص: "+o.roast+"\nالتحضير: "+o.prep+"\nالكمية: "+o.qty+"\nالاستلام: "+o.mode+(o.addr?" - "+o.addr:"")+"\nالدفع: "+o.pay+"\nالإجمالي التقديري: "+o.total+" جنيه"}
+$("send").onclick=function(){
+ var o={name:$("name").value.trim(),phone:$("phone").value.trim(),bean:$("bean").value,roast:pick("roast"),prep:pick("prep"),qty:$("qty").value,mode:pick("mode"),addr:$("addr").value.trim(),pay:pick("pay"),ts:Date.now(),status:"new"};
+ var e="";
+ if(!o.name)e="اكتب اسمك";else if(!/^[0-9٠-٩+\s-]{8,15}$/.test(o.phone))e="رقم التواصل غير صحيح";
+ else if(!o.bean)e="اختر نوع البن";else if(!o.roast)e="اختر درجة التحميص";else if(!o.prep)e="اختر سادة أو محوج";
+ else if(!o.mode)e="اختر طريقة الاستلام";else if(o.mode==="توصيل"&&!o.addr)e="اكتب عنوان التوصيل";else if(!o.pay)e="اختر طريقة الدفع";
+ $("err").textContent=e;if(e)return;
+ o.code=String(o.ts).slice(-6);o.total=total();
+ sv("gc_cust",{name:o.name,phone:o.phone,addr:o.addr});
+ orders.push(o);save();seen[o.code]=o.status;sv("gc_seen",seen);
+ toast("تم تسجيل طلبك رقم "+o.code);renderAll();show("Track");
+ window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(waText(o)),"_blank");
+};
+
+/* render */
+function active(){return orders.filter(function(o){return o.status!=="done"}).length}
+function badge(){var n=active(),b=$("badge");b.textContent=n;b.classList.toggle("hide",!n)}
+function renderMine(){var L=$("mine");L.textContent="";
+ if(!orders.length){L.textContent="لا توجد طلبات بعد";return}
+ orders.slice().sort(function(a,b){return b.ts-a.ts}).forEach(function(o){
+  var b=el("div","ord");b.appendChild(el("div","","طلب #"+o.code+" — "+o.bean+" | "+o.qty+" | "+o.total+" جنيه"));
+  var s=el("div","steps"),i=ST.indexOf(o.status||"new");
+  ST.forEach(function(k,n){var d=el("div","step"+(n<=i?" on":""));d.appendChild(el("i"));d.appendChild(document.createTextNode(stL(k,o.mode)));s.appendChild(d)});
+  b.appendChild(s);var r=el("div","row"),p=el("button","sec","طباعة الفاتورة PDF");p.onclick=function(){printO(o)};r.appendChild(p);b.appendChild(r);L.appendChild(b)})}
+function renderAdmin(){var L=$("list");L.textContent="";
+ var q=$("q").value.trim(),f=$("flt").value;
+ var a=orders.filter(function(o){return(f==="all"||(o.status||"new")===f)&&(!q||o.code.indexOf(q)>-1||String(o.phone).indexOf(q)>-1)}).sort(function(x,y){return y.ts-x.ts});
+ if(!a.length)L.textContent="لا توجد طلبات";
+ a.forEach(function(o){
+  var b=el("div","ord");b.appendChild(el("div","","#"+o.code+" "+o.name+" — "+o.phone+"\n"+o.bean+" | "+o.roast+" | "+o.prep+" | "+o.qty+"\n"+o.mode+(o.addr?" - "+o.addr:"")+" | "+o.pay+"\nالإجمالي: "+o.total+" جنيه\n"+fmt(o.ts)));
+  var r=el("div","row"),s=document.createElement("select");s.style.flex="1";
+  ST.forEach(function(k){var p=el("option","",stL(k,o.mode));p.value=k;if(k===(o.status||"new"))p.selected=true;s.appendChild(p)});
+  s.onchange=function(){o.status=s.value;save();seen[o.code]=o.status;sv("gc_seen",seen);toast("تم تحديث حالة الطلب #"+o.code);renderAll()};
+  var pb=el("button","sec","PDF");pb.onclick=function(){printO(o)};
+  var db=el("button","sec","حذف");db.onclick=function(){if(confirm("حذف الطلب؟")){orders=orders.filter(function(x){return x!==o});save();renderAll()}};
+  r.appendChild(s);r.appendChild(pb);r.appendChild(db);b.appendChild(r);L.appendChild(b)});
+ var P=$("prices");P.textContent="";
+ Object.keys(prices).forEach(function(k){P.appendChild(el("div","",k));var i=el("input");i.type="number";i.min="0";i.value=prices[k];i.onchange=function(){prices[k]=Math.max(0,+i.value||0);save();fillSel();upTotal();toast("تم تحديث السعر")};P.appendChild(i)})}
+function renderAll(){badge();renderMine();if(authed)renderAdmin()}
+$("q").oninput=$("flt").onchange=renderAdmin;
+
+/* print + csv */
+function printO(o){var p=$("print");p.textContent="";p.appendChild(el("h1","","جولد كافيه — فاتورة طلب"));
+ var t=el("table");t.style.width="100%";t.style.borderCollapse="collapse";
+ [["رقم الطلب",o.code],["الاسم",o.name],["رقم التواصل",o.phone],["نوع البن",o.bean],["التحميص",o.roast],["التحضير",o.prep],["الكمية",o.qty],["الاستلام",o.mode+(o.addr?" - "+o.addr:"")],["الدفع",o.pay],["الإجمالي التقديري",o.total+" جنيه"],["الحالة",stL(o.status,o.mode)],["التاريخ",fmt(o.ts)]].forEach(function(r){var tr=el("tr");r.forEach(function(c){tr.appendChild(el("td","",c))});t.appendChild(tr)});
+ p.appendChild(t);window.print()}
+$("csv").onclick=function(){var d=new Date().toDateString();
+ var rows=[["رقم","الاسم","الهاتف","البن","التحميص","التحضير","الكمية","الاستلام","العنوان","الدفع","الإجمالي","الحالة","الوقت"]];
+ orders.filter(function(o){return new Date(o.ts).toDateString()===d}).forEach(function(o){rows.push([o.code,o.name,o.phone,o.bean,o.roast,o.prep,o.qty,o.mode,o.addr,o.pay,o.total,stL(o.status,o.mode),fmt(o.ts)])});
+ if(rows.length<2){toast("لا توجد طلبات اليوم");return}
+ var s="\ufeff"+rows.map(function(r){return r.map(function(c){return '"'+String(c==null?"":c).replace(/"/g,'""')+'"'}).join(",")}).join("\n");
+ var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([s],{type:"text/csv;charset=utf-8"}));a.download="gold-cafe-"+new Date().toISOString().slice(0,10)+".csv";a.click()};
+
+/* sync status changes from other tabs */
+window.addEventListener("storage",function(e){if(e.key!=="gc_orders")return;orders=ld("gc_orders",[]);
+ orders.forEach(function(o){if(seen[o.code]&&seen[o.code]!==o.status)toast("طلب #"+o.code+": "+stL(o.status,o.mode));seen[o.code]=o.status});sv("gc_seen",seen);renderAll()});
+
+/* install */
+var dp=null,ios=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+function banner(t,btn){if(standalone||ld("gc_instx",0))return;$("instTxt").textContent=t;$("instBtn").classList.toggle("hide",!btn);$("inst").classList.remove("hide")}
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();dp=e;banner("📲 ثبّت تطبيق جولد كافيه على هاتفك",true)});
+$("instBtn").onclick=function(){if(dp){dp.prompt();dp=null}$("inst").classList.add("hide")};
+$("instX").onclick=function(){sv("gc_instx",1);$("inst").classList.add("hide")};
+if(ios&&!standalone)banner("📲 للتثبيت: اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية»",false);
+window.addEventListener("appinstalled",function(){$("inst").classList.add("hide");toast("تم تثبيت التطبيق")});
+if("serviceWorker" in navigator&&location.protocol!=="file:")navigator.serviceWorker.register("sw.js").catch(function(){});
+
+fillSel();upTotal();renderAll();
+})();
+</script>
+</body>
+</html>
